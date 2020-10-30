@@ -40,14 +40,16 @@ public:
 
     void append(T data) { return insert(data, this->size); }
 
-    dynamicArray<T> *concat(dynamicArray<T> *arr);
+    dynamicArray<T>* concat(dynamicArray<T>* arr);
 
     dynamicArray<T> slice(int start, int end);
 
-    T &operator[](int index);
+    T& operator[](int index);
+
+    T& operator[](int index) const;
 
     template<typename T1>
-    friend ostream &operator<<(ostream &out, const dynamicArray<T1> &dynArr);
+    friend ostream& operator<<(ostream& out, const dynamicArray<T1>& dynArr);
 
     void swap(int index1, int index2);
 
@@ -178,7 +180,15 @@ dynamicArray<T> dynamicArray<T>::slice(int start, int end) {
 }
 
 template<typename T>
-T &dynamicArray<T>::operator[](int index) {
+T& dynamicArray<T>::operator[](int index) {
+    if ((index <= -size) or (index >= size)) {
+        throw out_of_range("Index out of range");
+    }
+    return this->data[(index >= 0) ? index : (this->size + index)];
+}
+
+template<typename T>
+T& dynamicArray<T>::operator[](int index) const {
     if ((index <= -size) or (index >= size)) {
         throw out_of_range("Index out of range");
     }
@@ -186,7 +196,7 @@ T &dynamicArray<T>::operator[](int index) {
 }
 
 template<typename T1>
-ostream &operator<<(ostream &out, const dynamicArray<T1> &dynArr) {
+ostream& operator<<(ostream& out, const dynamicArray<T1>& dynArr) {
     for (int i = 0; i < dynArr.size; ++i) {
         if (i != dynArr.size - 1) {
             out << dynArr.data[i] << " ";

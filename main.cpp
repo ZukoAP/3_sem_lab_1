@@ -1,141 +1,165 @@
 #include <iostream>
-#include "not_needed/DynArray.h"
 #include "LinkList.h"
-#include "not_needed/Queue.h"
 #include <typeinfo>
-#include "not_needed/SingleLinkList.h"
-#include "not_needed/Tree.h"
-#include "not_needed/queueTester.h"
 #include "Sorters/MergeSorter.h"
 #include "Sorters/QuickSorter.h"
 #include "Sorters/ShellSorter.h"
 #include "Sorters/HeapSorter.h"
 #include "Sorters/Comparator.h"
+#include "ArraySequence.h"
+#include "ListSequence.h"
+#include <Windows.h>
 
-void fillSequenceRandom(int len, Sequence<int> *seq1) {
+void fillSequenceRandom(int len, Sequence<int>* seq1) {
     srand(time(NULL));
     int tmp;
-    for (int i = 0; i < len; i++){
+    for (int i = 0; i < len; i++) {
         tmp = rand() % 200;
         seq1->append(tmp);
     }
 }
 
+template<typename T>
+void printData(const Sequence<T>* a) {
+    for (int i = 0; i < a->length(); i++) {
+        std::cout << a->getElement(i) << std::endl;
+    }
+}
+
 int main() {
 
-
-  /*  LinkList<int> a;
-    for (int i = 0; i < 7; ++i) {
-        a.prepend(i);
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    std::cout << "Использование базовых сортировок" << std::endl;
+    Sequence<int>* a;
+    bool wasInitialized = false;
+    std::srand(std::time(nullptr));
+    while (true) {
+        std::cout << "Введите 0, если хотите завершить." << std::endl
+                  << "Введите 1, если хотите ввести массив для сортировки." << std::endl
+                  << "Введите 2, если хотите отсортировать массив." << std::endl
+                  << "Введите 3, если хотите сбросить введенные данные." << std::endl;
+        int userInput;
+        std::cin >> userInput;
+        if (userInput == 0) {
+            break;
+        } else if (userInput == 1) {
+            wasInitialized = true;
+            std::cout
+                    << "Введите количество элеменетов: "
+                    << std::endl;
+            int n;
+            std::cin >> n;
+            std::cout
+                    << "Если хотите рандомно заполнить, введите 1, иначе ручной ввод"
+                    << std::endl;
+            int anotherUserInput1;
+            std::cin >> anotherUserInput1;
+            std::cout
+                    << "Введите базовый класс\nlinkedList: 1, иначе array"
+                    << std::endl;
+            int anotherUserInput2;
+            std::cin >> anotherUserInput2;
+            if (anotherUserInput1 == 1) {
+                if (anotherUserInput2 == 1) {
+                    a = new ListSeq<int>();
+                    for (unsigned int i = 0; i < n; ++i) {
+                        a->append(std::rand() % n);
+                    }
+                } else {
+                    a = new ArraySeq<int>();
+                    for (unsigned int i = 0; i < n; ++i) {
+                        a->append(std::rand() % n);
+                    }
+                }
+            } else {
+                std::cout
+                        << "Введите числа через пробел"
+                        << std::endl;
+                if (anotherUserInput2 == 1) {
+                    a = new ListSeq<int>();
+                    for (unsigned int i = 0; i < n; ++i) {
+                        int buff;
+                        std::cin >> buff;
+                        a->append(buff);
+                    }
+                } else {
+                    a = new ArraySeq<int>();
+                    for (unsigned int i = 0; i < n; ++i) {
+                        int buff;
+                        std::cin >> buff;
+                        a->append(buff);
+                    }
+                }
+            }
+            std::cout
+                    << "Полученный массив:"
+                    << std::endl;
+            if (a->length() != 0) {
+                printData(a);
+            }
+        } else if (userInput == 2) {
+            if (!wasInitialized) {
+                std::cout << "\nСначала иницализируйте массив!!!\n";
+                continue;
+            }
+            std::cout << "Введите 0, если хотите отсортировать массив сортировкой Quick sort." << std::endl
+                      << "Введите 1, если хотите отсортировать массив сортировкой Shell sort." << std::endl
+                      << "Введите 2, если хотите отсортировать массив сортировкой Heap sort." << std::endl
+                      << "Введите 3, если хотите отсортировать массив сортировкой Merge sort."
+                      << std::endl;
+            int anotherUserInput1;
+            std::cin >> anotherUserInput1;
+            if (anotherUserInput1 == 0) {
+                QuickSorter<int> sorter;
+                if (a->length() != 0) {
+                    sorter.sort(a, &lessThan<int>);
+                    std::cout
+                            << "Отсортированный массив:"
+                            << std::endl;
+                    printData(a);
+                }
+            } else if (anotherUserInput1 == 1) {
+                ShellSorter<int> sorter;
+                if (a->length() != 0) {
+                    sorter.sort(a, &lessThan<int>);
+                    std::cout
+                            << "Отсортированный массив:"
+                            << std::endl;
+                    printData(a);
+                }
+            } else if (anotherUserInput1 == 2) {
+                HeapSorter<int> sorter;
+                if (a->length() != 0) {
+                    sorter.sort(a, &lessThan<int>);
+                    std::cout
+                            << "Отсортированный массив:"
+                            << std::endl;
+                    printData(a);
+                }
+            } else if (anotherUserInput1 == 3) {
+                MergeSorter<int> sorter;
+                if (a->length() != 0) {
+                    sorter.sort(a, &lessThan<int>);
+                    std::cout
+                            << "Отсортированный массив:"
+                            << std::endl;
+                    printData(a);
+                }
+            }
+        } else if (userInput == 3) {
+            if (wasInitialized) {
+                while (a->length() != 0) {
+                    a->pop(0);
+                }
+                delete a;
+                wasInitialized = false;
+            }
+        }
     }
+    std::cout << "До скорых встреч!";
 
-    LinkList<int> b = *(a.sublist(3, 4));
-    b.append(10);
-    a.insert(75, 7);
-    std::cout << a << std::endl;
-    a.concat(&b);
-    b.pop(2);
-    b[1] = 50;*/
-
-
-
-    /*DynArray<LinkList<std::string>> a;
-    LinkList<std::string> b;
-    for (int i = 0; i < 7; ++i) {
-        b.append(std::to_string(i)+"me");
-    }
-    a.append(b);
-    LinkList<std::string> c;
-    for (int i = 0; i < 7; ++i) {
-        c.append(std::to_string(i)+"one");
-    }
-    a.prepend(c);
-//    a.swap(0,1);
-    std::cout << a << std::endl;*/
-
-
-/*    Queue<int> a(new ListSeq<int>);
-    Queue<int> g(new ArraySeq<int>);
-    for (int i = 10; i < 16; ++i) {
-        g.push(i);
-    }
-
-    for (int i = 1; i < 6; ++i) {
-        a.push(i);
-    }
-    std::cout << a << std::endl;
-    Queue<int> h = a+g;
-
-    Queue<int> b(a);
-    a.swap(0, 4);
-//    a.pop();
-    b = b + a;
-    Queue<int> c = a.slice(0, 4);
-
-    a.map([](int &a) { a = a + 1; });
-
-    Queue<int> d = a.where([](int &a){
-        if(a%2 == 0)
-            return 1;
-        else
-            return 0;
-    });
-
-    int m = 2;
-    int f = a.reduce([](int &a, int m){
-        return a*m;
-        },1);
-
-    std::cout << a << std::endl;
-    std::cout << b << std::endl;
-    std::cout << c << std::endl;
-    std::cout << d << std::endl;
-    std::cout << f << std::endl;
-    std::cout << g << std::endl;
-    std::cout << "h: " <<h << std::endl;*/
-
-//    std::cout << (typeid(a)== typeid(Queue<int>)) << std::endl;
-
-    /*SLinkList<int> a;
-
-    for (int i = 0; i < 7; ++i) {
-        a.append(i);
-    }
-    a.reverse();
-    std::cout << a << std::endl;*/
-
-    /*Tree<int> a(50);
-
-    addNode(&a, 55);
-    addNode(&a, 6);
-    addNode(&a, 12);
-    addNode(&a, 15);
-    addNode(&a, 2);
-    addNode(&a, 3);
-    addNode(&a, 67);
-
-    inorderPrint(&a);
-    std::cout<<std::endl;
-    levelOrderPrint(&a);
-    std::cout<<std::endl;
-    BFS(&a);*/
-
-    //queueTester();
-/*
-    ArraySeq<int> a;
-    fillSequenceRandom(15, &a);
-    auto *mergeSorter = new MergeSorter<int>;
-    auto *quickSorter = new QuickSorter<int>;
-    auto *shellSorter = new ShellSorter<int>;
-    auto *heapSorter = new HeapSorter<int>;
-    for (int i = 0; i < a.length(); ++i) {
-        cout<<a.getElement(i)<<" ";
-    }
-    cout<<endl;
-    heapSorter->sort(&a, &lessThan<int>);
-    for (int i = 0; i < a.length(); ++i) {
-        cout<<a.getElement(i)<<" ";
-    }*/
 
     return 0;
 }
+

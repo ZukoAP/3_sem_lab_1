@@ -4,7 +4,7 @@
 #include "ISorter.h"
 
 template<typename T>
-class MergeSorter : public ISorter<T>{
+class MergeSorter : public ISorter<T> {
 public:
     Sequence<T>* sort(Sequence<T>* seq, bool (* cmp)(const T&, const T&)) override;
 
@@ -22,7 +22,7 @@ Sequence<T>* MergeSorter<T>::sort(Sequence<T>* seq, bool (* cmp)(const T&, const
 }
 
 template<typename T>
-void MergeSorter<T>::merge(Sequence<T>* seq, T* buff, int left, int mid, int right, bool (*cmp)(const T&, const T&)) {
+void MergeSorter<T>::merge(Sequence<T>* seq, T* buff, int left, int mid, int right, bool (* cmp)(const T&, const T&)) {
     int ileft = 0, iright = 0;
 
     while (ileft + left < mid && iright + mid < right) {

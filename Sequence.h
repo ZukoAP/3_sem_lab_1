@@ -9,7 +9,7 @@ public:
 
     ~Sequence() = default;
 
-    virtual int length() = 0;
+    virtual int length() const = 0;
 
     virtual const std::type_info& getType() = 0;
 
@@ -25,13 +25,13 @@ public:
 
     virtual void swap(int, int) = 0;
 
-    virtual T &getElement(int) = 0;
+    virtual T& getElement(int) const = 0;
 
 //    virtual int getIndex(T) = 0;
 
-    virtual void *getFirst() = 0;
+    virtual void* getFirst() = 0;
 
-    virtual void *getLast() = 0;
+    virtual void* getLast() = 0;
 };
 
 #endif

@@ -12,7 +12,7 @@ private:
 public:
     ArraySeq();
 
-    int length() override;
+    [[nodiscard]] int length() const override;
 
      const std::type_info& getType() override;
 
@@ -22,7 +22,7 @@ public:
 
     void pop(int) override;
 
-    T &getElement(int) override;
+    T& getElement(int) const override;
 
     void *getFirst() override;
 
@@ -41,7 +41,7 @@ ArraySeq<T>::ArraySeq() {
 }
 
 template<typename T>
-int ArraySeq<T>::length() {
+int ArraySeq<T>::length() const {
     return this->size;
 }
 
@@ -64,7 +64,7 @@ void ArraySeq<T>::pop(int index) {
 }
 
 template<typename T>
-T &ArraySeq<T>::getElement(int index) {
+T& ArraySeq<T>::getElement(int index) const {
     return this->data[index];
 }
 

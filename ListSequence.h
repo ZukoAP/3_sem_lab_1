@@ -12,7 +12,7 @@ private:
 public:
     ListSeq();
 
-    int length() override;
+    int length() const override;
 
     const std::type_info& getType() override;
 
@@ -22,7 +22,7 @@ public:
 
     void pop(int) override;
 
-    T &getElement(int) override;
+    T& getElement(int) const override;
 
     void *getFirst() override;
 
@@ -41,7 +41,7 @@ ListSeq<T>::ListSeq() {
 }
 
 template<typename T>
-int ListSeq<T>::length() {
+int ListSeq<T>::length() const {
     return this->size;
 }
 
@@ -64,7 +64,7 @@ void ListSeq<T>::pop(int index) {
 }
 
 template<typename T>
-T &ListSeq<T>::getElement(int index) {
+T& ListSeq<T>::getElement(int index) const {
     return this->data[index];
 }
 

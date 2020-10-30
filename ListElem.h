@@ -7,8 +7,8 @@ template<typename T>
 class ListElem {
 private:
     T val;
-    ListElem<T> *next;
-    ListElem<T> *prev;
+    ListElem<T>* next;
+    ListElem<T>* prev;
     bool hasVal{};
 public:
     ListElem();
@@ -17,22 +17,22 @@ public:
 
     void setVal(T val);
 
-    void setNextPtr(ListElem<T> *);
+    void setNextPtr(ListElem<T>*);
 
-    void setPrevPtr(ListElem<T> *);
+    void setPrevPtr(ListElem<T>*);
 
     T getVal();
 
-    ListElem<T> *getNextPtr();
+    ListElem<T>* getNextPtr();
 
-    ListElem<T> *getPrevPtr();
+    ListElem<T>* getPrevPtr();
 
     bool checkVal();
 
-    operator T &();
+    operator T&();
 
     template<typename T1>
-    friend std::ostream &operator<<(std::ostream &out, const ListElem<T1> &listEl);
+    friend std::ostream& operator<<(std::ostream& out, const ListElem<T1>& listEl);
 };
 
 template<typename T>
@@ -64,7 +64,7 @@ bool ListElem<T>::checkVal() {
 }
 
 template<typename T1>
-std::ostream &operator<<(std::ostream &out, const ListElem<T1> &listEl) {
+std::ostream& operator<<(std::ostream& out, const ListElem<T1>& listEl) {
     if (listEl.hasVal) {
         out << listEl.val;
     } else {
@@ -75,7 +75,7 @@ std::ostream &operator<<(std::ostream &out, const ListElem<T1> &listEl) {
 }
 
 template<typename T>
-ListElem<T>::operator T &() {
+ListElem<T>::operator T&() {
     if (this->hasVal) {
         return this->val;
     } else {
@@ -85,22 +85,22 @@ ListElem<T>::operator T &() {
 }
 
 template<typename T>
-void ListElem<T>::setNextPtr(ListElem<T> *nextPtr) {
+void ListElem<T>::setNextPtr(ListElem<T>* nextPtr) {
     this->next = nextPtr;
 }
 
 template<typename T>
-void ListElem<T>::setPrevPtr(ListElem<T> *prevPtr) {
+void ListElem<T>::setPrevPtr(ListElem<T>* prevPtr) {
     this->prev = prevPtr;
 }
 
 template<typename T>
-ListElem<T> *ListElem<T>::getNextPtr() {
+ListElem<T>* ListElem<T>::getNextPtr() {
     return this->next;
 }
 
 template<typename T>
-ListElem<T> *ListElem<T>::getPrevPtr() {
+ListElem<T>* ListElem<T>::getPrevPtr() {
     return this->prev;
 }
 

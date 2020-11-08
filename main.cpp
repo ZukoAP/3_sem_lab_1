@@ -9,6 +9,22 @@
 #include "ArraySequence.h"
 #include "ListSequence.h"
 #include <Windows.h>
+#include <chrono>
+
+template<typename T>
+void Sort(ISorter<T>* sorter, Sequence<T>* a, long long int& currTime) {
+    if (a->length() != 0) {
+        auto start = chrono::steady_clock::now();
+        sorter->sort(a, &lessThan<int>);
+        auto end = chrono::steady_clock::now();
+        currTime = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+        std::cout
+                << "Отсортированный массив:"
+                << std::endl;
+        printData(a);
+        std::cout << std::endl;
+    }
+}
 
 void fillSequenceRandom(int len, Sequence<int>* seq1) {
     srand(time(NULL));
@@ -27,13 +43,16 @@ void printData(const Sequence<T>* a) {
 }
 
 int main() {
-
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     std::cout << "Использование базовых сортировок" << std::endl;
+    ISorter<int>* sorter;
     Sequence<int>* a;
     bool wasInitialized = false;
+    ISorter<int>* sorters[4] = {new QuickSorter<int>, new ShellSorter<int>, new HeapSorter<int>, new MergeSorter<int>};
     std::srand(std::time(nullptr));
+    long long int prevTime = -1;
+    long long int currTime = -1;
     while (true) {
         std::cout << "Введите 0, если хотите завершить." << std::endl
                   << "Введите 1, если хотите ввести массив для сортировки." << std::endl
@@ -44,6 +63,7 @@ int main() {
         if (userInput == 0) {
             break;
         } else if (userInput == 1) {
+            prevTime = -1;
             wasInitialized = true;
             std::cout
                     << "Введите количество элеменетов: "
@@ -61,36 +81,20 @@ int main() {
             int anotherUserInput2;
             std::cin >> anotherUserInput2;
             if (anotherUserInput1 == 1) {
-                if (anotherUserInput2 == 1) {
-                    a = new ListSeq<int>();
-                    for (unsigned int i = 0; i < n; ++i) {
-                        a->append(std::rand() % n);
-                    }
-                } else {
-                    a = new ArraySeq<int>();
-                    for (unsigned int i = 0; i < n; ++i) {
-                        a->append(std::rand() % n);
-                    }
+                (anotherUserInput2 == 1) ? (a = new ListSeq<int>()) : (a = new ArraySeq<int>());
+                for (unsigned int i = 0; i < n; ++i) {
+                    a->append(std::rand() % n);
                 }
             } else {
                 std::cout
                         << "Введите числа через пробел"
                         << std::endl;
-                if (anotherUserInput2 == 1) {
-                    a = new ListSeq<int>();
+                (anotherUserInput2 == 1) ? (a = new ListSeq<int>()) : (a = new ArraySeq<int>());
                     for (unsigned int i = 0; i < n; ++i) {
                         int buff;
                         std::cin >> buff;
                         a->append(buff);
                     }
-                } else {
-                    a = new ArraySeq<int>();
-                    for (unsigned int i = 0; i < n; ++i) {
-                        int buff;
-                        std::cin >> buff;
-                        a->append(buff);
-                    }
-                }
             }
             std::cout
                     << "Полученный массив:"
@@ -110,44 +114,23 @@ int main() {
                       << std::endl;
             int anotherUserInput1;
             std::cin >> anotherUserInput1;
-            if (anotherUserInput1 == 0) {
-                QuickSorter<int> sorter;
-                if (a->length() != 0) {
-                    sorter.sort(a, &lessThan<int>);
-                    std::cout
-                            << "Отсортированный массив:"
-                            << std::endl;
-                    printData(a);
-                }
-            } else if (anotherUserInput1 == 1) {
-                ShellSorter<int> sorter;
-                if (a->length() != 0) {
-                    sorter.sort(a, &lessThan<int>);
-                    std::cout
-                            << "Отсортированный массив:"
-                            << std::endl;
-                    printData(a);
-                }
-            } else if (anotherUserInput1 == 2) {
-                HeapSorter<int> sorter;
-                if (a->length() != 0) {
-                    sorter.sort(a, &lessThan<int>);
-                    std::cout
-                            << "Отсортированный массив:"
-                            << std::endl;
-                    printData(a);
-                }
-            } else if (anotherUserInput1 == 3) {
-                MergeSorter<int> sorter;
-                if (a->length() != 0) {
-                    sorter.sort(a, &lessThan<int>);
-                    std::cout
-                            << "Отсортированный массив:"
-                            << std::endl;
-                    printData(a);
+            Sort(sorters[anotherUserInput1], a, currTime);
+            if (prevTime < 0) {
+                prevTime = currTime;
+            } else {
+                std::cout
+                        << "Если хотите сравнить с предыдущей, введите 1(иначе нажмите любую клавишу)"
+                        << std::endl;
+                int cmp;
+                std::cin >> cmp;
+                if (cmp == 1) {
+                    std::cout << "Показатели " << ((prevTime > currTime) ? "улучшились" : "ухудшились")
+                              << ":\n текущие: " << currTime << " ms\n предыдущие: " << prevTime << " ms\n";
+                    prevTime = currTime;
                 }
             }
         } else if (userInput == 3) {
+            prevTime = -1;
             if (wasInitialized) {
                 while (a->length() != 0) {
                     a->pop(0);
